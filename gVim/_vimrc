@@ -1,0 +1,71 @@
+set nocompatible
+source $VIMRUNTIME/vimrc_example.vim
+source $VIMRUNTIME/mswin.vim
+behave mswin
+
+set diffexpr=MyDiff()
+function MyDiff()
+  let opt = '-a --binary '
+  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+  let arg1 = v:fname_in
+  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+  let arg2 = v:fname_new
+  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+  let arg3 = v:fname_out
+  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+  let eq = ''
+  if $VIMRUNTIME =~ ' '
+    if &sh =~ '\<cmd'
+      let cmd = '""' . $VIMRUNTIME . '\diff"'
+      let eq = '"'
+    else
+      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+    endif
+  else
+    let cmd = $VIMRUNTIME . '\diff'
+  endif
+  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+endfunction
+
+set encoding=utf-8
+set fileencoding=utf-8
+
+lan mes en_US.utf8
+source $VIMRUNTIME/delmenu.vim
+"set langmenu=ru_RU.UTF-8
+"source $VIMRUNTIME/menu.vim
+
+colorscheme Mustang
+set number
+set tabstop=2
+set shiftwidth=2
+set smarttab
+set et
+set wrap
+set ai
+set guifont=Lucida_Console:h12:cRUSSIAN::
+set autochdir
+
+map <F2> :w<CR>
+imap <F2> <Esc>:w<CR>
+map <F3> :MRU<CR>
+imap <F3> <Esc>:MRU<CR>
+map <F4> :e.<CR>
+imap <F4> <Esc>:e.<CR>
+map <F5> :call MyRun()<CR>
+imap <F5> <Esc>:call MyRun()<CR>
+
+let g:neocomplcache_enable_at_startup = 1
+
+function MyRun()
+  if &filetype =~ 'php'
+    execute '!php %'
+  endif  
+  if &filetype =~ 'rb'
+    execute '!ruby %'
+  endif    
+  if &filetype =~ 'py'
+    execute '!python %'
+  endif  
+endfunction  
