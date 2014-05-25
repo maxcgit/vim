@@ -6,6 +6,6 @@ vim
 *Table test*
 
 
-ID: Name: Age
+ID | Name | Age
 1:2:3
 
